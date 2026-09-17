@@ -1,21 +1,20 @@
 import { Module } from '@nestjs/common';
-import { createObserveModule } from '@nestjs/observe';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-
-export const { ObserveModule, ObserveInstrument } = createObserveModule();
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { envConfigModule } from '@/configs/env-config.module.js';
+import { AuthModules } from '@/modules/auth/auth.module.js';
+import { AllExceptionsFilter } from '@/filters/all-exceptions.filter.js';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard.js';
+import { winstonConfigModule } from '@/configs/winston.module.js';
+import { RedisModule } from '@/modules/redis/redis.module.js';
 
 @Module({
-  imports: [
-    // Distributed tracing, auto-correlated logs, request/job metrics, error
-    // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
-    ObserveModule.forRoot({
-      appKey: 'YOUR_APP_KEY',
-      appSecret: 'YOUR_APP_SECRET',
-      serviceId: 'ai-system-backed',
-    }),
+  imports: [envConfigModule, winstonConfigModule, AuthModules, RedisModule],
+  controllers: [],
+  providers: [
+    /** 全局异常捕获 */
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
+    /** jwt守卫 */
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
