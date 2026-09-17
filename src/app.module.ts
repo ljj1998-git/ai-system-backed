@@ -6,9 +6,10 @@ import { AllExceptionsFilter } from '@/filters/all-exceptions.filter.js';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard.js';
 import { winstonConfigModule } from '@/configs/winston.module.js';
 import { RedisModule } from '@/modules/redis/redis.module.js';
+import { UserModule } from './modules/user/user.module.js';
 
 @Module({
-  imports: [envConfigModule, winstonConfigModule, AuthModules, RedisModule],
+  imports: [envConfigModule, winstonConfigModule, AuthModules, RedisModule, UserModule],
   controllers: [],
   providers: [
     /** 全局异常捕获 */

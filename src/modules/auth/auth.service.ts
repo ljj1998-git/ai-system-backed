@@ -34,6 +34,8 @@ export class AuthService {
    */
   async signIn(signInDto: SignInDto) {
     const { username, password, systemId } = signInDto;
+
+    return 'Hello World!'
     // const user = await this.usersService.getUserByUsername(username);
     // if (user.systemId !== systemId) {
     //   throw new BusinessException(ResponseMessage.systemNotMatchUser);
