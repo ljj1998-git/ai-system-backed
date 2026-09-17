@@ -7,7 +7,7 @@ WORKDIR /app
 RUN corepack enable
 
 # 复制依赖清单文件
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # 安装所有依赖（包含 devDependencies，构建时需要）
 RUN pnpm install --frozen-lockfile
@@ -28,7 +28,7 @@ RUN corepack enable
 ENV NODE_ENV=production
 
 # 复制依赖清单
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # 仅安装生产依赖（--prod 跳过 devDependencies）
 RUN pnpm install --prod --frozen-lockfile

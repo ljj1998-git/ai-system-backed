@@ -5,7 +5,7 @@ import z from 'zod';
 /**
  * 新增用户参数
  */
-export const createUserSchema = z.object({
+export const createUserDtoSchema = z.object({
   username: z
     .string()
     .nonempty({ error: '用户名不能为空' })
@@ -22,10 +22,7 @@ export const createUserSchema = z.object({
     .optional()
     .describe('手机号'),
   sex: z
-    .number()
-    .int({ error: '性别值不合法' })
-    .min(0, { error: '性别值不合法' })
-    .max(2, { error: '性别值不合法' })
+    .literal([0, 1, 2], { error: '性别值只能是 0男 1女 2未知' })
     .optional()
     .describe('性别 0男 1女 2未知'),
   email: z
@@ -33,6 +30,11 @@ export const createUserSchema = z.object({
     .max(50, { error: '邮箱不能超过50字' })
     .optional()
     .describe('邮箱'),
+  roleId: z.number().optional().describe('所属角色ID'),
+  systemId: z.coerce
+    .number()
+    .int({ error: '系统ID必须为整数' })
+    .describe('系统ID'),
 });
 
-export class CreateUserDto extends createZodDto(createUserSchema) {}
+export class CreateUserDto extends createZodDto(createUserDtoSchema) {}
